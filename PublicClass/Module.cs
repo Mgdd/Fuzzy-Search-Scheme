@@ -112,57 +112,71 @@ namespace PublicClass
                 var dt = new System.Data.DataTable();
                 double FuzzyPercent;
                 int fuzzyCounter = 0;
-                string repeatChar = "";
-                string unRepeatChar = "";
-
+                
                 StringBuilder KeyWord = new StringBuilder(keyWord.ToLower());
                 StringBuilder searchWord = new StringBuilder(searchTerm.ToLower());
 
-                #region get repeated chars
-                for (int a = 0; a < searchWord.Length; a++)
-                {
-                    for (int b = a + 1; b < searchWord.Length; b++)
-                    {
-                        if (searchWord[a] == searchWord[b])
-                        {
-                            if (!repeatChar.Contains(searchWord[a]))
-                                repeatChar += searchWord[b].ToString();
-                        }
-                    }
-                }
-                StringBuilder RepeatChar = new StringBuilder(repeatChar.ToLower());
+                #region get repeated chars in searchWord
+                StringBuilder SearchWordRepeatChar = new StringBuilder(GetRepeatedChars(searchWord.ToString()).ToLower());
                 #endregion
 
-                #region get string without repeated chars
-                for (int a = 0; a < searchWord.Length; a++)
-                {
-                    if (!RepeatChar.ToString().Contains(searchWord[a]))
-                    {
-                        unRepeatChar += searchWord[a].ToString();
-                    }
-                }
+                #region get string without repeated chars from searchWord
+                StringBuilder SearchWordResultString = new StringBuilder(SearchWordRepeatChar.ToString().ToLower() + GetUnRepeatedChar(searchWord.ToString().ToLower(), SearchWordRepeatChar.ToString().ToLower()).ToLower());
+                #endregion
 
-                StringBuilder resultString = new StringBuilder(repeatChar.ToLower() + unRepeatChar.ToLower());
+                #region get repeated chars in KeyWord
+                StringBuilder KeyWordRepeatChar = new StringBuilder(GetRepeatedChars(KeyWord.ToString()).ToLower());
+                #endregion
+
+                #region get string without repeated chars from KeyWord
+                StringBuilder KeyWordResultString = new StringBuilder(KeyWordRepeatChar.ToString().ToLower() + GetUnRepeatedChar(KeyWord.ToString().ToLower(), KeyWordRepeatChar.ToString().ToLower()).ToLower());
                 #endregion
 
                 #region calculate and return the FuzzyPercent
-                for (int k = 0; k < resultString.Length; k++)
+                for (int k = 0; k < SearchWordResultString.Length; k++)
                 {
-                    for (int l = 0; l < KeyWord.Length; l++)
+                    for (int l = 0; l < KeyWordResultString.Length; l++)
                     {
-                        if (resultString[k] == KeyWord[l])
+                        if (SearchWordResultString[k] == KeyWordResultString[l])
                             fuzzyCounter++;
                     }
-
                 }
-                return FuzzyPercent = (double)(fuzzyCounter) / (double)KeyWord.Length;
+                return FuzzyPercent = (double)(fuzzyCounter) / (double)KeyWordResultString.Length;
                 #endregion
-
             }
             catch (Exception)
             {
                 return -1;
             }
+        }
+
+        public static string GetRepeatedChars(string searchWord)
+        {
+            string repeatChar = "";
+            for (int a = 0; a < searchWord.Length; a++)
+            {
+                for (int b = a + 1; b < searchWord.Length; b++)
+                {
+                    if (searchWord[a] == searchWord[b])
+                    {
+                        if (!repeatChar.Contains(searchWord[a]))
+                            repeatChar += searchWord[b].ToString();
+                    }
+                }
+            }
+            return repeatChar;
+        }
+        public static string GetUnRepeatedChar(string searchWord, string RepeatedChar)
+        {
+            string unRepeatChar = "";
+            for (int a = 0; a < searchWord.Length; a++)
+            {
+                if (!RepeatedChar.ToString().Contains(searchWord[a]))
+                {
+                    unRepeatChar += searchWord[a].ToString();
+                }
+            }
+            return unRepeatChar;
         }
         public static int ToInt(this object obj)
         {
