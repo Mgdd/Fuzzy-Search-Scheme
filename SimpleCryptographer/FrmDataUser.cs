@@ -15,38 +15,41 @@ namespace SimpleCryptographer
 {
     public partial class FrmDataUser : Form
     {
+
+        private System.Data.DataTable dt;
         public FrmDataUser()
         {
             InitializeComponent();
         }
-        private void SearchData()
+        private void SearchData(int KeyWordId, double fuzzyPercent)
         {
             var AES = new AESalgorithm();
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                dgv.Rows.Clear();
+                
 
                 using (var con = new SqlConnection(Module.ConString))
                 {
-                    var sda = new SqlDataAdapter("select Title,FileContent,Keyword,[Rank] from SearchView where FuzzyWord=@FuzzyWord"+
-                        " group by Title,FileContent,Keyword,[Rank] order by [Rank] desc", con);
+                    var sda = new SqlDataAdapter("select Title,FileContent,Keyword,[Rank],fuzzyPercent=@fuzzyPercent from SearchView where KeyWordId=@KeyWordId " +
+                        " order by [Rank] desc", con);
 
-                    sda.SelectCommand.Parameters.AddWithValue("@FuzzyWord", AES.Encrpt(txtSearch.Text.Trim(), Module.encryptKey));
+                    sda.SelectCommand.Parameters.AddWithValue("@KeyWordId", KeyWordId);
+                    sda.SelectCommand.Parameters.AddWithValue("@fuzzyPercent", fuzzyPercent);
                     System.Data.DataTable dt = new System.Data.DataTable();
                     sda.Fill(dt);
 
                     foreach (DataRow row in dt.Rows)
                     {
 
-                        int i = dgv.Rows.Add(row["Title"], AES.Decrpt(row["FileContent"].ToString(), Module.encryptKey), AES.Decrpt(row["KeyWord"].ToString()
-                            , Module.encryptKey), row["Rank"]);
+                        int i = dgv.Rows.Add(row["Title"], AES.Decrpt(row["FileContent"].ToString(), Module.encryptKey), 
+                            row["KeyWord"].ToString(), row["Rank"], row["fuzzyPercent"]);
 
                     }
 
                 }
 
-                lblRowsCount.Text = "عدد السجلات : " + dgv.Rows.Count.ToString();
+                lblRowsCount.Text = "No of rows : " + dgv.Rows.Count.ToString();
                 this.Cursor = Cursors.Default;
             }
             catch (Exception ex)
@@ -58,7 +61,7 @@ namespace SimpleCryptographer
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
-            SearchData();
+            //SearchData();
         }
 
         private void btnLogOut_Click(object sender, EventArgs e)
@@ -66,6 +69,65 @@ namespace SimpleCryptographer
             this.Close();
             var frm = new FrmLogin();
             frm.Show();
+        }
+        
+        private void GetData()
+        {
+            dgv.Rows.Clear();
+            var dtFuzzy = new DataTable();
+            dtFuzzy.Columns.Add("id", typeof(int));
+            dtFuzzy.Columns.Add("Keyword", typeof(string));
+            dtFuzzy.Columns.Add("FuzzyPercent", typeof(double));
+
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+
+                var dt1 = new System.Data.DataTable();
+                var cmd = new SqlCommand();
+                using (var con = new SqlConnection(Module.ConString))
+                {
+                    con.Open();
+                    var sda =
+                    new SqlDataAdapter(
+                    "select * from KeywordIndexing ", con);
+
+                    sda.Fill(dt1);
+                    for (int i = 0; i < dt1.Rows.Count; i++)
+                    {
+                        string KeyWord = dt1.Rows[i]["Keyword"].ToString();
+                        int Id = dt1.Rows[i]["id"].ToInt();
+                        double fuzzyPer = Module.FuzzySearch(txtSearch.Text.Trim(), KeyWord);
+                        if (fuzzyPer >= 0.3)
+                        {
+                            dtFuzzy.Rows.Add(dt1.Rows[i]["id"].ToInt(), dt1.Rows[i]["Keyword"].ToString(), fuzzyPer);
+                        }
+                    }
+                }
+                Cursor = Cursors.Default;
+
+                DataView dv = new DataView(dtFuzzy);
+                dv.Sort = "FuzzyPercent desc";
+                dtFuzzy = dv.ToTable();
+
+                for (int i = 0; i < dtFuzzy.Rows.Count; i++)
+                {
+                    double FuzzyPercent = dtFuzzy.Rows[i]["FuzzyPercent"].ToDouble();
+                    SearchData(dtFuzzy.Rows[i]["id"].ToInt(), FuzzyPercent);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                Cursor = Cursors.Default;
+                MessageBox.Show(ex.Message, "UST System", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            GetData();
         }
     }
 }

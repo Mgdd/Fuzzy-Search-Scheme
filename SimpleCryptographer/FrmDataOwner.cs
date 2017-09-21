@@ -15,6 +15,7 @@ using System.Data.SqlClient;
 using PublicClass;
 using Model;
 using DAL;
+using System.Diagnostics;
 
 namespace SimpleCryptographer
 {
@@ -193,8 +194,6 @@ namespace SimpleCryptographer
             var file = new File();
             var AES = new AESalgorithm();
             LstKeywords = new List<Keyword>();
-            LstFuzzyKeywords = new List<Fuzzy>();
-
 
             file.FileIndex = Module.GetNewId("FileIndexing", "FileIndex", 3);
             file.UserName = Module.UserName;
@@ -219,11 +218,13 @@ namespace SimpleCryptographer
                     switch (Ext)
                     {
                         case ".pdf":
-                            rchText.Text = GetTextFromPDF(openFileDialog1.FileName);
+                            rchText.Text = Module.GetTextFromPDF(openFileDialog1.FileName);
                             file.Type = "pdf";
                             break;
                         case "docx":
-                            rchText.Text = GetTextFromWord(openFileDialog1.FileName);
+                            bool close = Module.CloseWordDocument(openFileDialog1.FileName);
+                            rchText.Text = Module.GetTextFromWord(openFileDialog1.FileName);
+                            close = Module.CloseWordDocument(openFileDialog1.FileName);
                             file.Type = "docx";
                             break;
                         case ".txt":
@@ -246,7 +247,7 @@ namespace SimpleCryptographer
                         {
                             if (words[i].Equals(words[j]) && words[i].Length>=3)
                             {
-                                if (isNotIsertedKey(words[i]))
+                                if (isNotInsertedKey(words[i]))
                                 {
                                     rchKeyWords.Text += words[i];
                                     rchKeyWords.Text += " ";
@@ -271,14 +272,13 @@ namespace SimpleCryptographer
 
                             keyWord.Id = index++;
                             keyWord.FileIndex = file.FileIndex;
-                            keyWord.KeyWord = AES.Encrpt(KeyNo[i], Module.encryptKey);
+                            keyWord.KeyWord = KeyNo[i];
                             keyWord.Rank = rank;
                             LstKeywords.Add(keyWord);
                         }
                     }
                     InsertFile(file);
                     InsertKeyword(LstKeywords);
-                    ApplyFuzzy(file.FileIndex);
                     SearchData();
                 }
                 
@@ -289,89 +289,8 @@ namespace SimpleCryptographer
                 MessageBox.Show(ex.Message);
             }
         }
-        private void ApplyFuzzy(int FileIndex)
-        {
-            LstFuzzyKeywords = new List<Fuzzy>();
-            var AES = new AESalgorithm();
-            try
-            {
-                Cursor = Cursors.WaitCursor;
-
-                dt = new System.Data.DataTable();
-                var cmd = new SqlCommand();
-                using (var con = new SqlConnection(Module.ConString))
-                {
-                    con.Open();
-                    var sda =
-                    new SqlDataAdapter(
-                    "select *  from KeywordView where FileIndex=@FileIndex", con);
-                    sda.SelectCommand.Parameters.AddWithValue("@FileIndex", FileIndex);
-
-                    sda.Fill(dt);
-                    for (int i = 0; i < dt.Rows.Count;i++ )
-                    {
-
-                        string KeyWord = AES.Decrpt(dt.Rows[i]["Keyword"].ToString(), Module.encryptKey);
-                        int Id = dt.Rows[i]["KeyWordId"].ToInt();
-
-                        for (int k = 0; k < KeyWord.Length; k++)
-                        {
-                            for (int j = 0; j < Module.arabicalphabit.Length; j++)
-                            {
-                                var fuzzy = new Fuzzy();
-                                fuzzy.KeyWordId = Id;
-                                StringBuilder Createfuzzy = new StringBuilder(KeyWord);
-                                StringBuilder alphabit = new StringBuilder(Module.arabicalphabit);
-                                Createfuzzy[k] = alphabit[j];
-                                fuzzy.FuzzyKey = AES.Encrpt(Createfuzzy.ToString(), Module.encryptKey);
-                                LstFuzzyKeywords.Add(fuzzy);
-                            }
-                        }
-
-
-                    }
-                        
-                }
-                Cursor = Cursors.Default;
-                InsertFuzzy(LstFuzzyKeywords);
-            }
-
-            catch (Exception ex)
-            {
-                Cursor = Cursors.Default;
-                MessageBox.Show(ex.Message, "UST System", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-        private string GetTextFromPDF(string Path)
-        {
-            StringBuilder text = new StringBuilder();
-            using (PdfReader reader = new PdfReader(Path))
-            {
-                for (int i = 1; i <= reader.NumberOfPages; i++)
-                {
-                    text.Append(PdfTextExtractor.GetTextFromPage(reader, i));
-                }
-            }
-
-            return text.ToString();
-        }
-        private string GetTextFromWord(string Path)
-        {
-            StringBuilder text = new StringBuilder();
-            Microsoft.Office.Interop.Word.Application word = new Microsoft.Office.Interop.Word.Application();
-            object miss = System.Reflection.Missing.Value;
-            object path = @Path;
-            object readOnly = true;
-            Microsoft.Office.Interop.Word.Document docs = word.Documents.Open(ref path, ref miss, false, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss);
-
-            for (int i = 0; i < docs.Paragraphs.Count; i++)
-            {
-                text.Append(" \r\n " + docs.Paragraphs[i + 1].Range.Text.ToString());
-            }
-
-            return text.ToString();
-        }
+        
+        
         private void Clear()
         {
             txtFile.Clear();
@@ -381,7 +300,7 @@ namespace SimpleCryptographer
             rchKeyRepat.Clear();
         }
         #endregion
-        private bool isNotIsertedKey(string Key)
+        private bool isNotInsertedKey(string Key)
         {
             string[] Keys = rchKeyWords.Text.Split(' ');
             for (int i = 0; i < Keys.Length; i++)
@@ -401,36 +320,6 @@ namespace SimpleCryptographer
                     noOfKey++;
             }
             return noOfKey;
-        }
-        private void InsertFuzzy(List<Fuzzy> LstFuzzyKeyword)
-        {
-            try
-            {
-                this.Cursor = Cursors.WaitCursor;
-
-                using (var con = new SqlConnection(PublicClass.Module.ConString))
-                {
-                    var cmd = new SqlCommand();
-                    cmd.Connection = con;
-                    con.Open();
-                    using (var transaction = con.BeginTransaction())
-                    {
-                        cmd.Transaction = transaction;
-                        LstFuzzyKeyword.InsertFuzzy(cmd);
-                        transaction.Commit();
-                    }
-                }
-                Cursor = Cursors.Default;
-                MessageBox.Show("Create Fuzzy Done!");
-                //Clear();
-            }
-
-            catch (Exception ex)
-            {
-                this.Cursor = Cursors.Default;
-                MessageBox.Show(ex.Message);
-            }
-
         }
         private void InsertKeyword(List<Keyword> LstKeyword)
         {
@@ -581,7 +470,7 @@ namespace SimpleCryptographer
 
                 }
 
-                lblRowsCount.Text = "عدد السجلات : " + dgv.Rows.Count.ToString();
+                lblRowsCount.Text = "No of rows : " + dgv.Rows.Count.ToString();
                 this.Cursor = Cursors.Default;
             }
             catch (Exception ex)
@@ -695,6 +584,24 @@ namespace SimpleCryptographer
             {
                 DeleteRecord(e.RowIndex);
             }
+            else
+                if (e.ColumnIndex == dgvcolOpen.Index)
+                {
+                    OpenFile(e.RowIndex);
+                }
+        }
+        private void OpenFile(int rowIndex)
+        {
+            try
+            {
+                string path = dgv.Rows[rowIndex].Cells[dgvColUrl.Index].Value.ToString();
+                Process.Start(@path);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
         private void DeleteRecord(int rowIndex)
         {
@@ -704,13 +611,6 @@ namespace SimpleCryptographer
                 dgv.DefaultCellStyle.SelectionBackColor = Color.Red;
 
                 dgv.Rows[rowIndex].ErrorText = "";
-                //var msgResult = ShowDialog.QuestionMsg("تأكيد عملية الحذف ؟", PublicModule.MessageBoxCaption);
-                /*if (msgResult == DialogResult.No)
-                {
-                    dgv.DefaultCellStyle.SelectionBackColor = Color.LightGreen;
-                    return;
-                }*/
-
                 #region Initialize the category object
                 var file = new File();
                 file.FileIndex = dgv.Rows[rowIndex].Cells[dgvColFileIndex.Index].Value.ToInt();
@@ -735,9 +635,7 @@ namespace SimpleCryptographer
 
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-
                         FileRepository.DeleteKeywordIndexing(dt.Rows[i]["KeyWordId"].ToInt(), cmd);
-                        FileRepository.DeleteKeyWordFuzzy(dt.Rows[i]["KeyWordId"].ToInt(), cmd);
                     }
 
 
@@ -748,7 +646,7 @@ namespace SimpleCryptographer
                         transaction.Commit();
                     }
                 }
-                MessageBox.Show("تمت حذف السجل بنجاح");
+                MessageBox.Show("Record deleted!");
                 dgv.DefaultCellStyle.SelectionBackColor = Color.LightGreen;
                 this.Cursor = Cursors.Default;
                 SearchData();

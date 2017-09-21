@@ -43,21 +43,6 @@ namespace DAL
                 cmd.ExecuteNonQuery();
             }
         }
-        public static void InsertFuzzy(this List<Fuzzy> lsFuzzy, SqlCommand cmd)
-        {
-            foreach (var KeyFuzzy in lsFuzzy)
-            {
-                cmd.CommandText = "INSERT INTO KeyWordFuzzy (KeyWordId,FuzzyWord)" +
-                            "VALUES (@KeyWordId,@FuzzyWord)";
-
-                cmd.Parameters.Clear();
-                cmd.Parameters.AddWithValue("@KeyWordId", KeyFuzzy.KeyWordId);
-                cmd.Parameters.AddWithValue("@FuzzyWord", KeyFuzzy.FuzzyKey);
-                //Execute Command
-                cmd.ExecuteNonQuery();
-            }
-        }
-
         public static void DeleteFile(this File file, SqlCommand cmd)
         {
             cmd.CommandText = "delete FileIndexing where FileIndex=@FileIndex";
@@ -70,13 +55,6 @@ namespace DAL
             cmd.CommandText = "delete KeywordIndexing where Id=@Id";
             cmd.Parameters.Clear();
             cmd.Parameters.AddWithValue("@Id", KeywordIndexing);
-            cmd.ExecuteNonQuery();
-        }
-        public static void DeleteKeyWordFuzzy(int KeyWordId, SqlCommand cmd)
-        {
-            cmd.CommandText = "delete KeyWordFuzzy where KeyWordId=@KeyWordId";
-            cmd.Parameters.Clear();
-            cmd.Parameters.AddWithValue("@KeyWordId", KeyWordId);
             cmd.ExecuteNonQuery();
         }
     }

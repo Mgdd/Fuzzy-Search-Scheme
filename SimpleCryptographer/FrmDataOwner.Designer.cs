@@ -49,15 +49,18 @@
             this.rchKeyRepat = new System.Windows.Forms.RichTextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.dgv = new System.Windows.Forms.DataGridView();
+            this.lblRowsCount = new System.Windows.Forms.Label();
+            this.btnSearch = new System.Windows.Forms.Button();
+            this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.dataGridViewImageColumn2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dgvColFileIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvColTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvColFileContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvColDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvColType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvColUrl = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvcolOpen = new System.Windows.Forms.DataGridViewImageColumn();
             this.dgvColDelete = new System.Windows.Forms.DataGridViewImageColumn();
-            this.lblRowsCount = new System.Windows.Forms.Label();
-            this.btnSearch = new System.Windows.Forms.Button();
             this.BoxFileCrypt.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
@@ -254,6 +257,7 @@
             this.dgvColDate,
             this.dgvColType,
             this.dgvColUrl,
+            this.dgvcolOpen,
             this.dgvColDelete});
             this.dgv.Location = new System.Drawing.Point(12, 458);
             this.dgv.Name = "dgv";
@@ -261,6 +265,46 @@
             this.dgv.Size = new System.Drawing.Size(805, 166);
             this.dgv.TabIndex = 30;
             this.dgv.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_CellClick);
+            // 
+            // lblRowsCount
+            // 
+            this.lblRowsCount.AutoSize = true;
+            this.lblRowsCount.Location = new System.Drawing.Point(754, 633);
+            this.lblRowsCount.Name = "lblRowsCount";
+            this.lblRowsCount.Size = new System.Drawing.Size(73, 13);
+            this.lblRowsCount.TabIndex = 31;
+            this.lblRowsCount.Text = "No of rows : 0";
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Location = new System.Drawing.Point(12, 628);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(116, 23);
+            this.btnSearch.TabIndex = 32;
+            this.btnSearch.Text = "Go to search form";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
+            // dataGridViewImageColumn1
+            // 
+            this.dataGridViewImageColumn1.HeaderText = "";
+            this.dataGridViewImageColumn1.Image = global::SimpleCryptographer.Properties.Resources.report;
+            this.dataGridViewImageColumn1.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
+            this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
+            this.dataGridViewImageColumn1.ReadOnly = true;
+            this.dataGridViewImageColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewImageColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // dataGridViewImageColumn2
+            // 
+            this.dataGridViewImageColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.dataGridViewImageColumn2.HeaderText = "-";
+            this.dataGridViewImageColumn2.Image = global::SimpleCryptographer.Properties.Resources.del;
+            this.dataGridViewImageColumn2.Name = "dataGridViewImageColumn2";
+            this.dataGridViewImageColumn2.ReadOnly = true;
+            this.dataGridViewImageColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewImageColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.dataGridViewImageColumn2.Width = 35;
             // 
             // dgvColFileIndex
             // 
@@ -300,35 +344,29 @@
             this.dgvColUrl.Name = "dgvColUrl";
             this.dgvColUrl.ReadOnly = true;
             // 
+            // dgvcolOpen
+            // 
+            this.dgvcolOpen.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.dgvcolOpen.HeaderText = "";
+            this.dgvcolOpen.Image = global::SimpleCryptographer.Properties.Resources.Open_Folder_64px;
+            this.dgvcolOpen.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
+            this.dgvcolOpen.Name = "dgvcolOpen";
+            this.dgvcolOpen.ReadOnly = true;
+            this.dgvcolOpen.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvcolOpen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.dgvcolOpen.Width = 19;
+            // 
             // dgvColDelete
             // 
-            this.dgvColDelete.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.dgvColDelete.HeaderText = "-";
-            this.dgvColDelete.Image = global::SimpleCryptographer.Properties.Resources.del;
+            this.dgvColDelete.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.dgvColDelete.HeaderText = "";
+            this.dgvColDelete.Image = global::SimpleCryptographer.Properties.Resources.Delete_52px;
+            this.dgvColDelete.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
             this.dgvColDelete.Name = "dgvColDelete";
             this.dgvColDelete.ReadOnly = true;
             this.dgvColDelete.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.dgvColDelete.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.dgvColDelete.Width = 35;
-            // 
-            // lblRowsCount
-            // 
-            this.lblRowsCount.AutoSize = true;
-            this.lblRowsCount.Location = new System.Drawing.Point(754, 633);
-            this.lblRowsCount.Name = "lblRowsCount";
-            this.lblRowsCount.Size = new System.Drawing.Size(64, 13);
-            this.lblRowsCount.TabIndex = 31;
-            this.lblRowsCount.Text = "عدد السجلات";
-            // 
-            // btnSearch
-            // 
-            this.btnSearch.Location = new System.Drawing.Point(12, 628);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(116, 23);
-            this.btnSearch.TabIndex = 32;
-            this.btnSearch.Text = "Go to search form";
-            this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            this.dgvColDelete.Width = 19;
             // 
             // FrmDataOwner
             // 
@@ -348,7 +386,7 @@
             this.Controls.Add(this.BoxFileCrypt);
             this.Name = "FrmDataOwner";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Architecture Arabic Fuzzy Search Scheme";
+            this.Text = "Architecture Fuzzy Search Scheme";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.BoxFileCrypt.ResumeLayout(false);
             this.BoxFileCrypt.PerformLayout();
@@ -384,14 +422,17 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.DataGridView dgv;
         private System.Windows.Forms.Label lblRowsCount;
+        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn1;
+        private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColFileIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColTitle;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColFileContent;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColType;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColUrl;
+        private System.Windows.Forms.DataGridViewImageColumn dgvcolOpen;
         private System.Windows.Forms.DataGridViewImageColumn dgvColDelete;
-        private System.Windows.Forms.Button btnSearch;
     }
 }
 

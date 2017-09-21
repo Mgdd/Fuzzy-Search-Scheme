@@ -30,12 +30,14 @@
         {
             this.lblRowsCount = new System.Windows.Forms.Label();
             this.dgv = new System.Windows.Forms.DataGridView();
-            this.txtSearch = new System.Windows.Forms.TextBox();
-            this.btnLogOut = new System.Windows.Forms.Button();
             this.dgvColTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvColFileContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvColKeyWord = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvColRank = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvColFuzzyPercent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txtSearch = new System.Windows.Forms.TextBox();
+            this.btnLogOut = new System.Windows.Forms.Button();
+            this.btnSearch = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -44,9 +46,9 @@
             this.lblRowsCount.AutoSize = true;
             this.lblRowsCount.Location = new System.Drawing.Point(729, 464);
             this.lblRowsCount.Name = "lblRowsCount";
-            this.lblRowsCount.Size = new System.Drawing.Size(64, 13);
+            this.lblRowsCount.Size = new System.Drawing.Size(73, 13);
             this.lblRowsCount.TabIndex = 33;
-            this.lblRowsCount.Text = "عدد السجلات";
+            this.lblRowsCount.Text = "No of rows : 0";
             // 
             // dgv
             // 
@@ -57,30 +59,13 @@
             this.dgvColTitle,
             this.dgvColFileContent,
             this.dgvColKeyWord,
-            this.dgvColRank});
+            this.dgvColRank,
+            this.dgvColFuzzyPercent});
             this.dgv.Location = new System.Drawing.Point(3, 65);
             this.dgv.Name = "dgv";
             this.dgv.ReadOnly = true;
             this.dgv.Size = new System.Drawing.Size(805, 393);
             this.dgv.TabIndex = 32;
-            // 
-            // txtSearch
-            // 
-            this.txtSearch.Location = new System.Drawing.Point(216, 23);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(358, 20);
-            this.txtSearch.TabIndex = 34;
-            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
-            // 
-            // btnLogOut
-            // 
-            this.btnLogOut.Location = new System.Drawing.Point(3, 460);
-            this.btnLogOut.Name = "btnLogOut";
-            this.btnLogOut.Size = new System.Drawing.Size(75, 23);
-            this.btnLogOut.TabIndex = 36;
-            this.btnLogOut.Text = "Logout";
-            this.btnLogOut.UseVisualStyleBackColor = true;
-            this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
             // 
             // dgvColTitle
             // 
@@ -107,11 +92,46 @@
             this.dgvColRank.Name = "dgvColRank";
             this.dgvColRank.ReadOnly = true;
             // 
+            // dgvColFuzzyPercent
+            // 
+            this.dgvColFuzzyPercent.HeaderText = "FuzzyPercent";
+            this.dgvColFuzzyPercent.Name = "dgvColFuzzyPercent";
+            this.dgvColFuzzyPercent.ReadOnly = true;
+            // 
+            // txtSearch
+            // 
+            this.txtSearch.Location = new System.Drawing.Point(216, 23);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(358, 20);
+            this.txtSearch.TabIndex = 34;
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            // 
+            // btnLogOut
+            // 
+            this.btnLogOut.Location = new System.Drawing.Point(3, 460);
+            this.btnLogOut.Name = "btnLogOut";
+            this.btnLogOut.Size = new System.Drawing.Size(75, 23);
+            this.btnLogOut.TabIndex = 36;
+            this.btnLogOut.Text = "Logout";
+            this.btnLogOut.UseVisualStyleBackColor = true;
+            this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Location = new System.Drawing.Point(125, 20);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(75, 23);
+            this.btnSearch.TabIndex = 37;
+            this.btnSearch.Text = "Search";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
             // FrmDataUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(814, 486);
+            this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.btnLogOut);
             this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.lblRowsCount);
@@ -131,9 +151,11 @@
         private System.Windows.Forms.DataGridView dgv;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Button btnLogOut;
+        private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColTitle;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColFileContent;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColKeyWord;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColRank;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgvColFuzzyPercent;
     }
 }
