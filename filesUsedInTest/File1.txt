@@ -1,0 +1,43 @@
+﻿ 
+INTERNET PORTOCOL (IP) V4 & V6
+
+ 
+ 
+
+What is Internet Protocol (IP)?
+IP (short for Internet Protocol) specifies the technical format of packets and the addressing scheme for computers to communicate over a network. Most networks combine IP with a higher-level protocol called Transmission Control Protocol (TCP), which establishes a virtual connection between a destination and a source.
+	IP by itself can be compared to something like the postal system. It allows you to address a package and drop it in the system, but there's no direct link between you and the recipient. TCP/IP, on the other hand, establishes a connection between two hosts so that they can send messages back and forth for a period of time.
+Internet Protocol Versions
+There are currently two version of Internet Protocol (IP): IPv4 and a new version called IPv6. IPv6 is an evolutionary upgrade to the Internet Protocol. IPv6 will coexist with the older IPv4 for some time.
+What is IPv4 (Internet Protocol Version 4)?
+	IPv4 (Internet Protocol Version 4) is the fourth revision of the Internet Protocol (IP) used to to identify devices on a network through an addressing system. The Internet Protocol is designed for use in interconnected systems of packet-switched computer communication networks.
+	IPv4 is the most widely deployed Internet protocol used to connect devices to the Internet. IPv4 uses a 32-bit address scheme allowing for a total of 2^32 addresses (just over 4 billion addresses).  With the growth of the Internet it is expected that the number of unused IPv4 addresses will eventually run out because every device -- including computers, smartphones and game consoles -- that connects to the Internet requires an address.
+
+
+What is IPv6 (Internet Protocol Version 6)?
+
+A new Internet addressing system Internet Protocol version 6 (IPv6) is being deployed to fulfill the need for more Internet addresses.
+IPv6 (Internet Protocol Version 6) is also called IPng (Internet Protocol next generation) and it is the newest version of the Internet Protocol (IP) reviewed in the IETF standards committees to replace the current version of IPv4 (Internet Protocol Version 4).
+IPv6 is the successor to Internet Protocol Version 4 (IPv4). It was designed as an evolutionary upgrade to the Internet Protocol and will, in fact, coexist with the older IPv4 for some time. IPv6 is designed to allow the Internet to grow steadily, both in terms of the number of hosts connected and the total amount of data traffic transmitted.
+IPv6 is often referred to as the "next generation" Internet standard and has been under development now since the mid-1990s. IPv6 was born out of concern that the demand for IP addresses would exceed the available supply.
+The Benefits of IPv6
+While increasing the pool of addresses is one of the most often-talked about benefit of IPv6, there are other important technological changes in IPv6 that will improve the IP protocol:
+•	No more NAT (Network Address Translation)
+•	Auto-configuration
+•	No more private address collisions
+•	Better multicast routing
+•	Simpler header format
+•	Simplified, more efficient routing
+•	True quality of service (QoS), also called "flow labeling"
+•	Built-in authentication and privacy support
+•	Flexible options and extensions
+•	Easier administration (say good-bye to DHCP)
+The Difference Between IPv4 and IPv6 Addresses
+An IP address is binary numbers but can be stored as text for human readers.  For example, a 32-bit numeric address (IPv4) is written in decimal as four numbers separated by periods. Each number can be zero to 255. For example, 1.160.10.240 could be an IP address.
+IPv6 addresses are 128-bit IP address written in hexadecimal and separated by colons. An example IPv6 address could be written like this: 3ffe:1900:4545:3:200:f8ff:fe21:67cf 
+
+
+
+
+
+
