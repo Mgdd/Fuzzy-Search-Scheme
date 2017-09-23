@@ -98,7 +98,7 @@ namespace SimpleCryptographer
                         string KeyWord = dt1.Rows[i]["Keyword"].ToString();
                         int Id = dt1.Rows[i]["id"].ToInt();
                         double fuzzyPer = Module.FuzzySearch(txtSearch.Text.Trim(), KeyWord);
-                        if (fuzzyPer >= 0.3)
+                        if (fuzzyPer >= lblFuzzyPercent.Text.ToDouble())
                         {
                             dtFuzzy.Rows.Add(dt1.Rows[i]["id"].ToInt(), dt1.Rows[i]["Keyword"].ToString(), fuzzyPer);
                         }
@@ -128,6 +128,24 @@ namespace SimpleCryptographer
         private void btnSearch_Click(object sender, EventArgs e)
         {
             GetData();
+        }
+
+        private void FrmDataUser_Load(object sender, EventArgs e)
+        {
+            trkFuzzyPercent.Minimum = 0;
+            trkFuzzyPercent.Maximum = 100;
+            trkFuzzyPercent.Value = 50;
+            InitializeLabels();
+        }
+
+        private void trkFuzzyPercent_Scroll(object sender, EventArgs e)
+        {
+            InitializeLabels();
+        }
+        private void InitializeLabels()
+        {
+            lblFuzzyPercent.Text = ((trkFuzzyPercent.Value.ToDouble()) / 100).ToString();
+            lblPercent.Text = trkFuzzyPercent.Value + " %";
         }
     }
 }

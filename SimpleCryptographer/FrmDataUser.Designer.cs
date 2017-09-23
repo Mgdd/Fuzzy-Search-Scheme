@@ -38,7 +38,13 @@
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.btnLogOut = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
+            this.trkFuzzyPercent = new System.Windows.Forms.TrackBar();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblPercent = new System.Windows.Forms.Label();
+            this.lblFuzzyPercent = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trkFuzzyPercent)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblRowsCount
@@ -61,10 +67,10 @@
             this.dgvColKeyWord,
             this.dgvColRank,
             this.dgvColFuzzyPercent});
-            this.dgv.Location = new System.Drawing.Point(3, 65);
+            this.dgv.Location = new System.Drawing.Point(3, 88);
             this.dgv.Name = "dgv";
             this.dgv.ReadOnly = true;
-            this.dgv.Size = new System.Drawing.Size(805, 393);
+            this.dgv.Size = new System.Drawing.Size(805, 370);
             this.dgv.TabIndex = 32;
             // 
             // dgvColTitle
@@ -100,7 +106,7 @@
             // 
             // txtSearch
             // 
-            this.txtSearch.Location = new System.Drawing.Point(216, 23);
+            this.txtSearch.Location = new System.Drawing.Point(216, 31);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(358, 20);
             this.txtSearch.TabIndex = 34;
@@ -118,7 +124,7 @@
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(125, 20);
+            this.btnSearch.Location = new System.Drawing.Point(125, 28);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 23);
             this.btnSearch.TabIndex = 37;
@@ -126,11 +132,51 @@
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
+            // trkFuzzyPercent
+            // 
+            this.trkFuzzyPercent.Location = new System.Drawing.Point(6, 28);
+            this.trkFuzzyPercent.Name = "trkFuzzyPercent";
+            this.trkFuzzyPercent.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.trkFuzzyPercent.Size = new System.Drawing.Size(188, 45);
+            this.trkFuzzyPercent.TabIndex = 39;
+            this.trkFuzzyPercent.Scroll += new System.EventHandler(this.trkFuzzyPercent_Scroll);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lblPercent);
+            this.groupBox1.Controls.Add(this.lblFuzzyPercent);
+            this.groupBox1.Controls.Add(this.trkFuzzyPercent);
+            this.groupBox1.Location = new System.Drawing.Point(606, 3);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(202, 79);
+            this.groupBox1.TabIndex = 40;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Matching ratio";
+            // 
+            // lblPercent
+            // 
+            this.lblPercent.AutoSize = true;
+            this.lblPercent.Location = new System.Drawing.Point(94, 15);
+            this.lblPercent.Name = "lblPercent";
+            this.lblPercent.Size = new System.Drawing.Size(24, 13);
+            this.lblPercent.TabIndex = 42;
+            this.lblPercent.Text = "0 %";
+            // 
+            // lblFuzzyPercent
+            // 
+            this.lblFuzzyPercent.AutoSize = true;
+            this.lblFuzzyPercent.Location = new System.Drawing.Point(94, 60);
+            this.lblFuzzyPercent.Name = "lblFuzzyPercent";
+            this.lblFuzzyPercent.Size = new System.Drawing.Size(13, 13);
+            this.lblFuzzyPercent.TabIndex = 41;
+            this.lblFuzzyPercent.Text = "0";
+            // 
             // FrmDataUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(814, 486);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.btnLogOut);
             this.Controls.Add(this.txtSearch);
@@ -139,7 +185,11 @@
             this.Name = "FrmDataUser";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DataUser";
+            this.Load += new System.EventHandler(this.FrmDataUser_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trkFuzzyPercent)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -157,5 +207,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColKeyWord;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColRank;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColFuzzyPercent;
+        private System.Windows.Forms.TrackBar trkFuzzyPercent;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label lblFuzzyPercent;
+        private System.Windows.Forms.Label lblPercent;
     }
 }
