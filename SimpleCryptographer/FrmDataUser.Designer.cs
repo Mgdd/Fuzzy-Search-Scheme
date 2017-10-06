@@ -28,13 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblRowsCount = new System.Windows.Forms.Label();
             this.dgv = new System.Windows.Forms.DataGridView();
+            this.dgvColUrl = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvColTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvColFileContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvColKeyWord = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvColRank = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvColFuzzyPercent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvColOpen = new System.Windows.Forms.DataGridViewImageColumn();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.btnLogOut = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
@@ -42,19 +43,12 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lblPercent = new System.Windows.Forms.Label();
             this.lblFuzzyPercent = new System.Windows.Forms.Label();
+            this.btnBack = new System.Windows.Forms.Button();
+            this.lblRowsCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trkFuzzyPercent)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // lblRowsCount
-            // 
-            this.lblRowsCount.AutoSize = true;
-            this.lblRowsCount.Location = new System.Drawing.Point(729, 464);
-            this.lblRowsCount.Name = "lblRowsCount";
-            this.lblRowsCount.Size = new System.Drawing.Size(73, 13);
-            this.lblRowsCount.TabIndex = 33;
-            this.lblRowsCount.Text = "No of rows : 0";
             // 
             // dgv
             // 
@@ -62,16 +56,26 @@
             this.dgv.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
             this.dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvColUrl,
             this.dgvColTitle,
             this.dgvColFileContent,
             this.dgvColKeyWord,
             this.dgvColRank,
-            this.dgvColFuzzyPercent});
+            this.dgvColFuzzyPercent,
+            this.dgvColOpen});
             this.dgv.Location = new System.Drawing.Point(3, 88);
             this.dgv.Name = "dgv";
             this.dgv.ReadOnly = true;
             this.dgv.Size = new System.Drawing.Size(805, 370);
             this.dgv.TabIndex = 32;
+            this.dgv.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellClick);
+            // 
+            // dgvColUrl
+            // 
+            this.dgvColUrl.HeaderText = "Url";
+            this.dgvColUrl.Name = "dgvColUrl";
+            this.dgvColUrl.ReadOnly = true;
+            this.dgvColUrl.Visible = false;
             // 
             // dgvColTitle
             // 
@@ -103,6 +107,16 @@
             this.dgvColFuzzyPercent.HeaderText = "FuzzyPercent";
             this.dgvColFuzzyPercent.Name = "dgvColFuzzyPercent";
             this.dgvColFuzzyPercent.ReadOnly = true;
+            // 
+            // dgvColOpen
+            // 
+            this.dgvColOpen.HeaderText = "";
+            this.dgvColOpen.Image = global::SimpleCryptographer.Properties.Resources.Open_Folder_64px;
+            this.dgvColOpen.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
+            this.dgvColOpen.Name = "dgvColOpen";
+            this.dgvColOpen.ReadOnly = true;
+            this.dgvColOpen.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvColOpen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // txtSearch
             // 
@@ -171,16 +185,36 @@
             this.lblFuzzyPercent.TabIndex = 41;
             this.lblFuzzyPercent.Text = "0";
             // 
+            // btnBack
+            // 
+            this.btnBack.Location = new System.Drawing.Point(733, 460);
+            this.btnBack.Name = "btnBack";
+            this.btnBack.Size = new System.Drawing.Size(75, 23);
+            this.btnBack.TabIndex = 41;
+            this.btnBack.Text = "Back";
+            this.btnBack.UseVisualStyleBackColor = true;
+            this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
+            // 
+            // lblRowsCount
+            // 
+            this.lblRowsCount.AutoSize = true;
+            this.lblRowsCount.Location = new System.Drawing.Point(371, 465);
+            this.lblRowsCount.Name = "lblRowsCount";
+            this.lblRowsCount.Size = new System.Drawing.Size(73, 13);
+            this.lblRowsCount.TabIndex = 42;
+            this.lblRowsCount.Text = "No of rows : 0";
+            // 
             // FrmDataUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(814, 486);
+            this.Controls.Add(this.lblRowsCount);
+            this.Controls.Add(this.btnBack);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.btnLogOut);
             this.Controls.Add(this.txtSearch);
-            this.Controls.Add(this.lblRowsCount);
             this.Controls.Add(this.dgv);
             this.Name = "FrmDataUser";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -197,19 +231,22 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblRowsCount;
         private System.Windows.Forms.DataGridView dgv;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Button btnLogOut;
         private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.TrackBar trkFuzzyPercent;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label lblFuzzyPercent;
+        private System.Windows.Forms.Label lblPercent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgvColUrl;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColTitle;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColFileContent;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColKeyWord;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColRank;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvColFuzzyPercent;
-        private System.Windows.Forms.TrackBar trkFuzzyPercent;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label lblFuzzyPercent;
-        private System.Windows.Forms.Label lblPercent;
+        private System.Windows.Forms.DataGridViewImageColumn dgvColOpen;
+        private System.Windows.Forms.Button btnBack;
+        private System.Windows.Forms.Label lblRowsCount;
     }
 }

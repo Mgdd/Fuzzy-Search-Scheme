@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -31,7 +32,7 @@ namespace SimpleCryptographer
 
                 using (var con = new SqlConnection(Module.ConString))
                 {
-                    var sda = new SqlDataAdapter("select Title,FileContent,Keyword,[Rank],fuzzyPercent=@fuzzyPercent from SearchView where KeyWordId=@KeyWordId " +
+                    var sda = new SqlDataAdapter("select Url,Title,FileContent,Keyword,[Rank],fuzzyPercent=@fuzzyPercent from SearchView where KeyWordId=@KeyWordId " +
                         " order by [Rank] desc", con);
 
                     sda.SelectCommand.Parameters.AddWithValue("@KeyWordId", KeyWordId);
@@ -42,7 +43,7 @@ namespace SimpleCryptographer
                     foreach (DataRow row in dt.Rows)
                     {
 
-                        int i = dgv.Rows.Add(row["Title"], AES.Decrpt(row["FileContent"].ToString(), Module.encryptKey), 
+                        int i = dgv.Rows.Add(row["Url"], row["Title"], AES.Decrpt(row["FileContent"].ToString(), Module.encryptKey), 
                             row["KeyWord"].ToString(), row["Rank"], row["fuzzyPercent"]);
 
                     }
@@ -77,6 +78,7 @@ namespace SimpleCryptographer
             var dtFuzzy = new DataTable();
             dtFuzzy.Columns.Add("id", typeof(int));
             dtFuzzy.Columns.Add("Keyword", typeof(string));
+            dtFuzzy.Columns.Add("Rank", typeof(int));
             dtFuzzy.Columns.Add("FuzzyPercent", typeof(double));
 
             try
@@ -90,24 +92,24 @@ namespace SimpleCryptographer
                     con.Open();
                     var sda =
                     new SqlDataAdapter(
-                    "select * from KeywordIndexing ", con);
+                    "select * from KeywordView ", con);
 
                     sda.Fill(dt1);
                     for (int i = 0; i < dt1.Rows.Count; i++)
                     {
                         string KeyWord = dt1.Rows[i]["Keyword"].ToString();
-                        int Id = dt1.Rows[i]["id"].ToInt();
+                        int Id = dt1.Rows[i]["KeyWordId"].ToInt();
                         double fuzzyPer = Module.FuzzySearch(txtSearch.Text.Trim(), KeyWord);
                         if (fuzzyPer >= lblFuzzyPercent.Text.ToDouble())
                         {
-                            dtFuzzy.Rows.Add(dt1.Rows[i]["id"].ToInt(), dt1.Rows[i]["Keyword"].ToString(), fuzzyPer);
+                            dtFuzzy.Rows.Add(dt1.Rows[i]["KeyWordId"].ToInt(), dt1.Rows[i]["Keyword"].ToString(), dt1.Rows[i]["Rank"].ToString(), fuzzyPer);
                         }
                     }
                 }
                 Cursor = Cursors.Default;
 
                 DataView dv = new DataView(dtFuzzy);
-                dv.Sort = "FuzzyPercent desc";
+                dv.Sort = " FuzzyPercent Desc, Rank Desc";
                 dtFuzzy = dv.ToTable();
 
                 for (int i = 0; i < dtFuzzy.Rows.Count; i++)
@@ -115,7 +117,6 @@ namespace SimpleCryptographer
                     double FuzzyPercent = dtFuzzy.Rows[i]["FuzzyPercent"].ToDouble();
                     SearchData(dtFuzzy.Rows[i]["id"].ToInt(), FuzzyPercent);
                 }
-
             }
 
             catch (Exception ex)
@@ -146,6 +147,43 @@ namespace SimpleCryptographer
         {
             lblFuzzyPercent.Text = ((trkFuzzyPercent.Value.ToDouble()) / 100).ToString();
             lblPercent.Text = trkFuzzyPercent.Value + " %";
+        }
+
+        private void dgv_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == dgvColOpen.Index)
+            {
+                OpenFile(e.RowIndex);
+            }
+        }
+
+        private void OpenFile(int rowIndex)
+        {
+            try
+            {
+                string path = dgv.Rows[rowIndex].Cells[dgvColUrl.Index].Value.ToString();
+                Process.Start(@path);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            if (Module.IsDataOwner)
+            {
+                this.Close();
+                var frm = new FrmDataOwner();
+                frm.Show();
+            }
+            else
+            {
+                this.Close();
+                var frm = new FrmLogin();
+                frm.Show();
+            }
         }
     }
 }
