@@ -31,8 +31,7 @@ namespace DAL
                             "VALUES (@Id,@Keyword)"+
                             " INSERT INTO Ranking (KeyWordId,FileId,Rank)" +
                             " VALUES (@Id,@FileIndex,@Rank)";
-                /*cmd.CommandText = "INSERT INTO KeywordIndexing (Id,FileIndex ,Keyword,Rank)" +
-                            "VALUES (@Id,@FileIndex,@Keyword,@Rank)";*/
+                
 
                 cmd.Parameters.Clear();
                 cmd.Parameters.AddWithValue("@Id", Keywords.Id);
